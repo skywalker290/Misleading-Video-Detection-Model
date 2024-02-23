@@ -2,6 +2,7 @@
 
 from pytube import YouTube
 from tqdm import tqdm
+import pandas as pd
 import requests
 
 def download_video(video_url, save_path='.'):
@@ -9,11 +10,10 @@ def download_video(video_url, save_path='.'):
         yt = YouTube(video_url)
 
         # Choose the 720p stream (modify as needed)
-        for i in yt.streams:
-            print(i)
+        # for i in yt.streams:
+        #     print(i)
 
-        return
-        video = yt.streams.filter(res='720p', progressive=True, file_extension='mp4').first()
+        video = yt.streams.filter(res='360p', progressive=True, file_extension='mp4').first()
 
         print(f"Downloading: {yt.title}")
 
@@ -41,5 +41,26 @@ def download_video(video_url, save_path='.'):
         print(f"Error: {str(e)}")
 
 
-video_url="www.youtube.com/something/something"
-download_video(video_url)
+# video_url="www.youtube.com/something/something"
+# download_video(video_url)
+
+
+
+## Downloading MVD Dataset
+MVD=pd.read_csv('Datasets/MVD_DATASET.csv')
+print(MVD.columns)
+
+MVD_FAKE=MVD[MVD['LABEL']=='FAKE']
+MVD_REAL=MVD[MVD['LABEL']=='ORIGINAL']
+
+urls="https://www.youtube.com/watch?v="
+
+for i in MVD_FAKE['video_id']:
+    download_video(urls+i,'Datasets/MVD/FAKE/')
+
+
+
+
+
+
+
